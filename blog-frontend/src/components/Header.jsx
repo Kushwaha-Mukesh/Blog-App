@@ -3,6 +3,7 @@ import { BsSearch } from "react-icons/bs";
 import { IoIosMoon } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
+import { RxCross2 } from "react-icons/rx";
 
 const Header = () => {
   const [show, setShow] = useState(false);
@@ -21,7 +22,7 @@ const Header = () => {
           <input
             type="text"
             name="search"
-            id=""
+            placeholder="Search blog by name..."
             className="mr-1 focus:outline-none bg-transparent"
           />
           <button type="submit">
@@ -51,7 +52,11 @@ const Header = () => {
           </Link>
         </div>
         <div className="md:hidden cursor-pointer" onClick={handleClick}>
-          <GiHamburgerMenu className="text-[30px]" />
+          {show ? (
+            <RxCross2 className="text-[30px]" />
+          ) : (
+            <GiHamburgerMenu className="text-[30px]" />
+          )}
         </div>
       </div>
 
