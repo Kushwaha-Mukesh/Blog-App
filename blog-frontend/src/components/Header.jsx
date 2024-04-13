@@ -63,13 +63,13 @@ const Header = () => {
       {show && (
         <div className="flex flex-col justify-between h-[80vh] absolute bg-white w-[200px] top-12 right-0 rounded-lg p-4">
           <div className="flex flex-col gap-4">
-            <Link>
+            <Link to={"/"}>
               <span>Home</span>
             </Link>
-            <Link>
+            <Link to={"/about"}>
               <span>About</span>
             </Link>
-            <Link>
+            <Link to={"/projects"}>
               <span>Projects</span>
             </Link>
           </div>
@@ -77,7 +77,7 @@ const Header = () => {
             <span className="text-lg w-full rounded-lg px-2">
               <IoIosMoon />
             </span>
-            <Link>
+            <Link to={"/sign-in"}>
               <button>Sign in</button>
             </Link>
           </div>
