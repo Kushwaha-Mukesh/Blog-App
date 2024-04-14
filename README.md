@@ -8,4 +8,6 @@
 
 ### Features
 
-> Features of this project will be added after the completion of the project.
+1. Authentication using jsonwebtoken
+2. Admin dashboard
+3. Advance searching and filtering
