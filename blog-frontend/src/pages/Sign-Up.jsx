@@ -26,7 +26,6 @@ const SignUp = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      console.log(error.response.data);
       setIsLoading(false);
     }
   };

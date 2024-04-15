@@ -6,11 +6,14 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "../store/userSlice";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading: isLoading, error } = useSelector((state) => state.user);
   const [showPass, setShowPass] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -19,15 +22,14 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      setIsLoading(true);
+      dispatch(signInStart());
       const res = await axios.post("/api/auth/signIn", data);
       if (res.data.success) {
+        dispatch(signInSuccess(res.data));
         navigate("/dashboard");
       }
-      setIsLoading(false);
     } catch (error) {
-      console.log(error.response.data);
-      setIsLoading(false);
+      dispatch(signInFailure(error.response.data));
     }
   };
   return (
