@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { ImSpinner9 } from "react-icons/im";
 import { useState } from "react";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -103,10 +103,7 @@ const SignUp = () => {
             )}
           </button>
         </form>
-        <button className="border rounded-lg px-2 p-1 text-white mt-4 mb-2">
-          <FcGoogle className="inline mr-2 relative top-[-2px]" />
-          Continue with Google
-        </button>
+        <OAuth />
         <span className="text-sm">
           Have an Account? <Link to={"/sign-in"}>Sign In</Link>
         </span>

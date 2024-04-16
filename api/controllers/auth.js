@@ -70,3 +70,44 @@ export const signIn = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+export const google = async (req, res) => {
+  const { name, email, googlePhotoUrl } = req.body;
+  if (!name || !email || !googlePhotoUrl) {
+    return res
+      .status(403)
+      .json({ success: false, message: "Invalid credentials!" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      user.password = undefined;
+      res
+        .status(200)
+        .cookie("token", token, { httpOnly: true })
+        .json({ success: true, message: "sign in successfull!", user });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashPassword = await bcrypt.hash(generatedPassword, 10);
+      const newUser = await User.create({
+        name,
+        email,
+        password: hashPassword,
+        profilePicture: googlePhotoUrl,
+      });
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      newUser.password = undefined;
+      res
+        .status(200)
+        .cookie("token", token, { httpOnly: true })
+        .json({ success: true, message: "sign in successfull!", newUser });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "server google authentication error" });
+  }
+};

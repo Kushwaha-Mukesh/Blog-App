@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
@@ -8,6 +7,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../store/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -95,10 +95,7 @@ const SignIn = () => {
             )}
           </button>
         </form>
-        <button className="border rounded-lg px-2 p-1 text-white mt-4 mb-2">
-          <FcGoogle className="inline mr-2 relative top-[-2px]" />
-          Continue with Google
-        </button>
+        <OAuth />
         <span className="text-sm">
           Don't Have an Account? <Link to={"/sign-up"}>Sign Up</Link>
         </span>
