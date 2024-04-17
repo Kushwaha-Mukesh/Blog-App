@@ -31,7 +31,7 @@ const OAuth = () => {
   };
   return (
     <button
-      className="border rounded-lg px-2 p-1 text-white mt-4 mb-2"
+      className="border-2 border-black rounded-lg px-2 p-1 mt-4 mb-2"
       onClick={handleClick}
     >
       <FcGoogle className="inline mr-2 relative top-[-2px]" />

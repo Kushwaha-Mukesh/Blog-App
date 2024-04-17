@@ -55,7 +55,7 @@ const SignIn = () => {
             <input
               type="email"
               id="email"
-              className="rounded-lg px-2 p-1 outline-none w-full"
+              className="rounded-lg px-2 p-1 outline-none border-2 border-black w-full bg-transparent"
               {...register("email", { required: true })}
             />
           </label>
@@ -67,7 +67,7 @@ const SignIn = () => {
             <input
               type={showPass ? "text" : "password"}
               id="password"
-              className="rounded-lg px-2 p-1 outline-none w-full"
+              className="rounded-lg px-2 p-1 outline-none border-2 border-black w-full bg-transparent"
               {...register("password", { required: true })}
             />
             <span

@@ -52,7 +52,7 @@ const SignUp = () => {
             <input
               type="text"
               id="name"
-              className="rounded-lg px-2 p-1 outline-none w-full"
+              className="rounded-lg px-2 p-1 outline-none border-2 border-black w-full bg-transparent"
               {...register("name", { required: true })}
             />
           </label>
@@ -64,7 +64,7 @@ const SignUp = () => {
             <input
               type="email"
               id="email"
-              className="rounded-lg px-2 p-1 outline-none w-full"
+              className="rounded-lg px-2 p-1 outline-none border-2 border-black w-full bg-transparent"
               {...register("email", { required: true })}
             />
           </label>
@@ -76,7 +76,7 @@ const SignUp = () => {
             <input
               type={showPass ? "text" : "password"}
               id="password"
-              className="rounded-lg px-2 p-1 outline-none w-full"
+              className="rounded-lg px-2 p-1 outline-none border-2 border-black w-full bg-transparent"
               {...register("password", { required: true })}
             />
             <span
@@ -87,7 +87,7 @@ const SignUp = () => {
             </span>
           </label>
           {errors.password && (
-            <span className="text-sm text-red-500">This field is required</span>
+            <span className="text-sm text-red-700">This field is required</span>
           )}
           <button
             disabled={isLoading}

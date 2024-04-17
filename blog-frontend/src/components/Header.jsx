@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
-import { IoIosMoon } from "react-icons/io";
+import { IoIosMoon, IoIosSunny } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../store/themeSlice";
 
 const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
+  const [profile, setProfile] = useState(false);
   const handleClick = () => {
     setShow(!show);
   };
@@ -41,15 +47,40 @@ const Header = () => {
           </Link>
         </div>
         <div className="sm:flex justify-center hidden">
-          <span className="text-lg bg-black text-white rounded-lg px-2">
-            <IoIosMoon className="relative top-2" />
-          </span>
-          <Link
-            to={"/sign-in"}
-            className="border border-black rounded-lg px-2 ml-2"
+          <span
+            className="text-lg rounded-lg px-2 border-2 border-black cursor-pointer"
+            onClick={() => dispatch(toggleTheme())}
           >
-            Sign in
-          </Link>
+            {theme === "light" ? (
+              <IoIosSunny className="relative top-1" />
+            ) : (
+              <IoIosMoon className="relative top-1" />
+            )}
+          </span>
+          {currentUser ? (
+            <div className="relative">
+              <img
+                src={currentUser.newUser.profilePicture}
+                alt="user"
+                className="w-8 rounded-lg ml-2 cursor-pointer"
+                onClick={() => setProfile(!profile)}
+              />
+              {profile && (
+                <div className="flex flex-col gap-2 absolute px-4 py-2 rounded-lg right-0 mt-1 border-2 border-black">
+                  <span>{currentUser.newUser.name}</span>
+                  <Link to={"/profile"}>Profile</Link>
+                  <span>Sign Out</span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to={"/sign-in"}
+              className="border border-black rounded-lg px-2 ml-2"
+            >
+              Sign in
+            </Link>
+          )}
         </div>
         <div className="md:hidden cursor-pointer" onClick={handleClick}>
           {show ? (
@@ -61,7 +92,7 @@ const Header = () => {
       </div>
 
       {show && (
-        <div className="flex flex-col justify-between h-[80vh] absolute bg-white w-[200px] top-12 right-0 rounded-lg p-4">
+        <div className="flex flex-col justify-between h-[80vh] absolute w-[200px] top-12 right-0 rounded-lg p-4 z-20 border-2 border-black">
           <div className="flex flex-col gap-4">
             <Link to={"/"}>
               <span>Home</span>
@@ -72,14 +103,26 @@ const Header = () => {
             <Link to={"/projects"}>
               <span>Projects</span>
             </Link>
+            {currentUser && <Link to={"/profile"}>Profile</Link>}
           </div>
           <div className="w-full">
-            <span className="text-lg w-full rounded-lg px-2">
-              <IoIosMoon />
+            <span
+              className="text-lg rounded-lg px-2 cursor-pointer"
+              onClick={() => dispatch(toggleTheme())}
+            >
+              {theme === "light" ? (
+                <IoIosSunny className="ml-2" />
+              ) : (
+                <IoIosMoon className="ml-2" />
+              )}
             </span>
-            <Link to={"/sign-in"}>
-              <button>Sign in</button>
-            </Link>
+            {currentUser ? (
+              <span>Sign Out</span>
+            ) : (
+              <Link to={"/sign-in"}>
+                <button>Sign in</button>
+              </Link>
+            )}
           </div>
         </div>
       )}
