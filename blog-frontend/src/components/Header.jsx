@@ -68,7 +68,7 @@ const Header = () => {
               {profile && (
                 <div className="flex flex-col gap-2 absolute px-4 py-2 rounded-lg right-0 mt-1 border-2 border-black">
                   <span>{currentUser.newUser.name}</span>
-                  <Link to={"/profile"}>Profile</Link>
+                  <Link to={"/dashboard?tab=profile"}>Profile</Link>
                   <span>Sign Out</span>
                 </div>
               )}
@@ -103,7 +103,7 @@ const Header = () => {
             <Link to={"/projects"}>
               <span>Projects</span>
             </Link>
-            {currentUser && <Link to={"/profile"}>Profile</Link>}
+            {currentUser && <Link to={"/dashboard?tab=profile"}>Profile</Link>}
           </div>
           <div className="w-full">
             <span
