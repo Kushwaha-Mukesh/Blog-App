@@ -48,7 +48,7 @@ const Header = () => {
         </div>
         <div className="sm:flex justify-center hidden">
           <span
-            className="text-lg rounded-lg px-2 border-2 border-black cursor-pointer"
+            className="text-lg rounded-full px-2 border-2 border-black cursor-pointer"
             onClick={() => dispatch(toggleTheme())}
           >
             {theme === "light" ? (
@@ -62,7 +62,7 @@ const Header = () => {
               <img
                 src={currentUser.newUser.profilePicture}
                 alt="user"
-                className="w-8 rounded-lg ml-2 cursor-pointer"
+                className="w-8 rounded-full ml-2 cursor-pointer"
                 onClick={() => setProfile(!profile)}
               />
               {profile && (
