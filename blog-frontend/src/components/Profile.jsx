@@ -120,6 +120,7 @@ const Profile = () => {
           type="email"
           id="email"
           placeholder="Email"
+          readOnly
           defaultValue={currentUser.newUser.email}
           className="outline-none border-2 text-center py-1 rounded-lg bg-transparent"
         />
