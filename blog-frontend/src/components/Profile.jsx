@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateStart, updateSuccess, updateFailure } from "../store/userSlice";
 import {
   getDownloadURL,
   getStorage,
@@ -9,13 +10,19 @@ import {
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import axios from "axios";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
+  const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -26,6 +33,7 @@ const Profile = () => {
   };
 
   const uploadImage = async () => {
+    setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -43,10 +51,13 @@ const Profile = () => {
         setImageFileUploadProgress(null);
         setImageFile(null);
         setImageFileUrl(null);
+        setImageFileUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
+          setFormData({ ...formData, profilePicture: downloadURL });
+          setImageFileUploading(false);
         });
       }
     );
@@ -58,10 +69,43 @@ const Profile = () => {
     }
   }, [imageFile]);
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateUserSuccess(null);
+    setUpdateUserError(null);
+    console.log(formData);
+    if (Object.keys(formData).length === 0) {
+      setUpdateUserError("No changes were made!");
+      return;
+    }
+    if (imageFileUploading) {
+      setUpdateUserError("Please wait image for upload!");
+      return;
+    }
+    try {
+      dispatch(updateStart());
+      const res = await axios.put(
+        `/api/user/update/${currentUser.newUser._id}`,
+        formData,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        dispatch(updateSuccess(res.data));
+        setUpdateUserSuccess("User Profile Updated Successfully!");
+      }
+    } catch (error) {
+      dispatch(updateFailure(error.response.data));
+    }
+  };
+
   return (
     <div className=" w-full mx-4 md:w-1/2 md:mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="file"
           accept="image/*"
@@ -115,6 +159,7 @@ const Profile = () => {
           placeholder="Your Name"
           defaultValue={currentUser.newUser.name}
           className="outline-none border-2 text-center py-1 rounded-lg bg-transparent"
+          onChange={handleChange}
         />
         <input
           type="email"
@@ -123,12 +168,14 @@ const Profile = () => {
           readOnly
           defaultValue={currentUser.newUser.email}
           className="outline-none border-2 text-center py-1 rounded-lg bg-transparent"
+          onChange={handleChange}
         />
         <input
           type="password"
           id="password"
           placeholder="Password"
           className="outline-none border-2 text-center py-1 rounded-lg bg-transparent"
+          onChange={handleChange}
         />
         <button
           type="submit"
@@ -137,10 +184,21 @@ const Profile = () => {
           Update
         </button>
       </form>
-      <div className="flex justify-between text-red-500 mt-4">
+      <div className="flex justify-between text-red-500 my-4">
         <span>Delete Account</span>
         <span>Sign Out</span>
       </div>
+      {updateUserSuccess && (
+        <span className="w-full text-center bg-green-600 py-1 rounded-lg px-2">
+          {updateUserSuccess}
+        </span>
+      )}
+
+      {updateUserError && (
+        <span className="w-full text-center bg-red-600 py-1 rounded-lg px-2">
+          {updateUserError}
+        </span>
+      )}
     </div>
   );
 };

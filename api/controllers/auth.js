@@ -61,10 +61,11 @@ export const signIn = async (req, res) => {
     user.password = undefined;
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res
-      .status(200)
-      .cookie("token", token, { httpOnly: true })
-      .json({ success: true, message: "User Sign In Successfully", user });
+    res.status(200).cookie("token", token, { httpOnly: true }).json({
+      success: true,
+      message: "User Sign In Successfully",
+      newUser: user,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });

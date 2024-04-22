@@ -13,7 +13,7 @@ export const updateUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User updated successfully",
-      data: updatedUser,
+      newUser: updatedUser,
     });
   } catch (error) {
     console.log(error.message);
