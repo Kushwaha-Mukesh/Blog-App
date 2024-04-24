@@ -84,10 +84,11 @@ export const google = async (req, res) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       user.password = undefined;
-      res
-        .status(200)
-        .cookie("token", token, { httpOnly: true })
-        .json({ success: true, message: "sign in successfull!", user });
+      res.status(200).cookie("token", token, { httpOnly: true }).json({
+        success: true,
+        message: "sign in successfull!",
+        newUser: user,
+      });
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +

@@ -7,6 +7,7 @@ import {
   deleteStart,
   deleteSuccess,
   deleteFailure,
+  signoutSuccess,
 } from "../store/userSlice";
 import {
   getDownloadURL,
@@ -131,6 +132,17 @@ const Profile = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.get("/api/user/signOut");
+      if (res.data.success) {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className=" w-full mx-4 md:w-1/2 md:mx-auto">
@@ -218,7 +230,9 @@ const Profile = () => {
           <span onClick={handleDelete} className="cursor-pointer">
             Delete Account
           </span>
-          <span>Sign Out</span>
+          <span onClick={handleSignOut} className="cursor-pointer">
+            Sign Out
+          </span>
         </div>
         {updateUserSuccess && (
           <span className="w-full text-center bg-green-600 py-1 rounded-lg px-2">

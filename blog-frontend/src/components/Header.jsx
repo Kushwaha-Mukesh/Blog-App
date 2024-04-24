@@ -6,6 +6,8 @@ import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../store/themeSlice";
+import { signoutSuccess } from "../store/userSlice";
+import axios from "axios";
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -16,6 +18,18 @@ const Header = () => {
   const handleClick = () => {
     setShow(!show);
   };
+
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.get("/api/user/signOut");
+      if (res.data.success) {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="flex align-middle justify-between p-2">
@@ -69,7 +83,9 @@ const Header = () => {
                 <div className="flex flex-col gap-2 absolute px-4 py-2 rounded-lg right-0 mt-1 border-2 border-black">
                   <span>{currentUser.newUser.name}</span>
                   <Link to={"/dashboard?tab=profile"}>Profile</Link>
-                  <span>Sign Out</span>
+                  <span className="cursor-pointer" onClick={handleSignOut}>
+                    Sign Out
+                  </span>
                 </div>
               )}
             </div>
