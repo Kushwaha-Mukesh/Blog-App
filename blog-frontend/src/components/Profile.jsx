@@ -22,7 +22,7 @@ import axios from "axios";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -222,8 +222,9 @@ const Profile = () => {
           <button
             type="submit"
             className="hover:bg-gradient-to-r from-transparent via-blue-400 to-transparent border-2 py-1 rounded-lg"
+            disabled={loading || imageFileUploading}
           >
-            Update
+            {loading ? "Loading..." : "Update"}
           </button>
         </form>
         <div className="flex justify-between text-red-500 my-4">
