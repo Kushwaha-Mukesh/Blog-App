@@ -13,6 +13,7 @@ export const isLoggedIn = (req, res, next) => {
     }
     if (data) {
       req.userId = data.id;
+      req.isAdmin = data.isAdmin;
       next();
     }
   });

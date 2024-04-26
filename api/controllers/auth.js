@@ -60,7 +60,10 @@ export const signIn = async (req, res) => {
 
     user.password = undefined;
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET
+    );
     res.status(200).cookie("token", token, { httpOnly: true }).json({
       success: true,
       message: "User Sign In Successfully",
@@ -82,7 +85,10 @@ export const google = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
       user.password = undefined;
       res.status(200).cookie("token", token, { httpOnly: true }).json({
         success: true,
@@ -100,7 +106,10 @@ export const google = async (req, res) => {
         password: hashPassword,
         profilePicture: googlePhotoUrl,
       });
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
       newUser.password = undefined;
       res
         .status(200)
