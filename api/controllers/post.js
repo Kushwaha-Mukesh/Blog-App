@@ -24,7 +24,7 @@ export const createPost = async (req, res) => {
       data: post,
     });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ success: false, message: "Internal server error" });
+    console.log(error.message);
   }
 };
