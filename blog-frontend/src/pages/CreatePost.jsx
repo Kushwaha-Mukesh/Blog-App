@@ -12,7 +12,6 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const [publishError, setPublishError] = useState(null);
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ const CreatePost = () => {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [publishError, setPublishError] = useState(null);
   const handleUploadImage = async (e) => {
     e.preventDefault();
     try {
