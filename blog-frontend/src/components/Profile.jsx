@@ -145,7 +145,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className=" w-full mx-4 md:w-1/2 md:mx-auto">
+      <div className="flex-1 mx-4 md:w-1/2 md:mx-auto">
         <h1 className="text-3xl text-center font-semibold my-7">Profile</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input

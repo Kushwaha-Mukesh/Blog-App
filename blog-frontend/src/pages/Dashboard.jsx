@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Profile from "../components/Profile";
-import CreatePost from "./CreatePost";
+import Posts from "../components/Posts";
+import Users from "../components/Users";
 
 const dashboard = () => {
   const location = useLocation();
@@ -16,9 +17,11 @@ const dashboard = () => {
   }, [location.search]);
 
   return (
-    <div className="min-h-screen flex flex-col sm:flex-row mt-4">
+    <div className="min-h-screen w-full flex flex-col sm:flex-row mt-4">
       <Sidebar />
       {tab === "profile" && <Profile />}
+      {tab === "posts" && <Posts />}
+      {tab === "users" && <Users />}
     </div>
   );
 };
