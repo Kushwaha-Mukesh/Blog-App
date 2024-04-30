@@ -70,3 +70,60 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const updatePost = async (req, res) => {
+  if (!req.isAdmin || !req.userId) {
+    return res
+      .status(403)
+      .json({ success: false, message: "You are not allowed to update post." });
+  }
+
+  try {
+    const postId = req.params.postId;
+    const userId = req.userId;
+    if (req.body.title) {
+      const slug = req.body.title
+        .split(" ")
+        .join("-")
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9-]/g, "-");
+
+      req.body.slug = slug;
+    }
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId, userId },
+      { ...req.body },
+      { returnOriginal: false }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Post updated successfully.",
+      post: updatedPost,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Error updating post" });
+  }
+};
+
+export const deletePost = async (req, res) => {
+  if (!req.isAdmin || !req.userId) {
+    return res.status(403).json({
+      success: false,
+      message: "You are not allowd to delete this post.",
+    });
+  }
+  try {
+    const deletePost = await Post.findOneAndDelete({
+      _id: req.params.postId,
+      userId: req.userId,
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Post deleted successfully." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Error deleting post" });
+  }
+};
