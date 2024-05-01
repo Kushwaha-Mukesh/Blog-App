@@ -74,7 +74,7 @@ const Posts = () => {
     <>
       {currentUser.newUser.isAdmin && posts.length > 0 ? (
         <div className="flex-1 mx-4 mt-8 overflow-x-auto">
-          <table className="table-fixed text-center min-w-[800px] w-full">
+          <table className="table-auto text-center min-w-[800px] w-full">
             <thead>
               <tr className="border-b-8 border-transparent">
                 <th>Date Updated</th>
