@@ -90,7 +90,7 @@ const Posts = () => {
                 <tr key={post._id} className="border-b-8 border-transparent">
                   <td>{new Date(post.updatedAt).toLocaleDateString()}</td>
                   <td>
-                    <Link to={`/post/${post._id}`}>
+                    <Link to={`/post/${post.slug}`}>
                       <img
                         className="w-14 h-14 rounded-lg mx-auto"
                         src={post.image}
@@ -99,7 +99,7 @@ const Posts = () => {
                     </Link>
                   </td>
                   <td>
-                    <Link to={`/post/${post._id}`}>{post.title}</Link>
+                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
                   </td>
                   <td>{post.category}</td>
                   <td>
