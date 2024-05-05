@@ -37,17 +37,27 @@ const PostPage = () => {
     );
 
   return (
-    <main>
-      <h1>{post && post.title}</h1>
-      <Link to={`/search?category=${post && post.category}`}>
+    <main className="flex flex-col items-center justify-center w-3/4 md:w-1/2 mx-auto">
+      <h1 className="text-xl sm:text-3xl mt-8 w-full">{post && post.title}</h1>
+      <Link
+        className="text-sm my-8 border-2 rounded-lg px-2 py-1"
+        to={`/search?category=${post && post.category}`}
+      >
         {post && post.category}
       </Link>
-      <img src={post && post.image} alt="post-image" />
-      <div>
-        <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
-        <span>{post && (post.content.length / 1000).toFixed(0)} mins read</span>
+      <img className="w-full" src={post && post.image} alt="post-image" />
+      <div className="w-full flex justify-between mt-4 mb-8">
+        <span className="italic">
+          {post && new Date(post.createdAt).toLocaleDateString()}
+        </span>
+        <span className="italic">
+          {post && (post.content.length / 1000).toFixed(0)} mins read
+        </span>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: post && post.content }}></div>
+      <div
+        className="w-full post-content"
+        dangerouslySetInnerHTML={{ __html: post && post.content }}
+      ></div>
     </main>
   );
 };
