@@ -16,7 +16,11 @@ export const createComment = async (req, res) => {
     });
     res
       .status(200)
-      .json({ success: true, message: "Comment created successfully" });
+      .json({
+        success: true,
+        message: "Comment created successfully",
+        comment,
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Error creating comment" });
@@ -35,12 +39,11 @@ export const getComment = async (req, res) => {
     const comments = await Comment.find({ postId: postId }).sort({
       createdAt: -1,
     });
-    res
-      .status(200)
-      .json(
-        { success: false, message: "comments fetched successfully" },
-        comments
-      );
+    res.status(200).json({
+      success: false,
+      message: "comments fetched successfully",
+      comments,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });

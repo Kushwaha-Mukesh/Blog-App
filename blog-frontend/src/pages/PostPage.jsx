@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ImSpinner10 } from "react-icons/im";
+import Comment from "../components/Comment";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -45,7 +46,11 @@ const PostPage = () => {
       >
         {post && post.category}
       </Link>
-      <img className="w-full" src={post && post.image} alt="post-image" />
+      <img
+        className="w-full object-cover rounded-lg"
+        src={post && post.image}
+        alt="post-image"
+      />
       <div className="w-full flex justify-between mt-4 mb-8">
         <span className="italic">
           {post && new Date(post.createdAt).toLocaleDateString()}
@@ -58,6 +63,7 @@ const PostPage = () => {
         className="w-full post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
+      {post && <Comment postId={post._id} />}
     </main>
   );
 };

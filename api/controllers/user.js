@@ -79,3 +79,15 @@ export const signOut = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+export const getOneUser = async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.params.userId });
+    res
+      .status(200)
+      .json({ success: true, message: "User fetched successfully", user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
