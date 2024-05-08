@@ -2,10 +2,11 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import FetchComment from "./FetchComment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Comment = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const commentRef = useRef();
   const submitComment = async (e) => {
@@ -37,6 +38,32 @@ const Comment = ({ postId }) => {
     };
     getComments();
   }, [postId]);
+
+  const handleLike = async (id) => {
+    if (!currentUser) {
+      navigate("/sign-in");
+      return;
+    }
+    try {
+      const res = await axios.get(`/api/comment/likeComment/${id}`);
+      if (res.data.success) {
+        setComments(
+          comments.map((comment) =>
+            comment._id === id
+              ? {
+                  ...comment,
+                  likes: res.data.comment.likes,
+                  numberOfLikes: res.data.comment.numberOfLikes,
+                }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <span className="mt-14 text-sm self-start mb-2 text-blue-400">
@@ -75,7 +102,11 @@ const Comment = ({ postId }) => {
       <div className="self-start mb-14 mt-6">
         {comments.length > 0 &&
           comments.map((comment) => (
-            <FetchComment key={comment._id} comment={comment} />
+            <FetchComment
+              key={comment._id}
+              comment={comment}
+              handleLike={handleLike}
+            />
           ))}
       </div>
     </>

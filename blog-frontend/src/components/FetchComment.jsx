@@ -2,8 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { AiFillLike } from "react-icons/ai";
 
-const FetchComment = ({ comment }) => {
+const FetchComment = ({ comment, handleLike }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
   const [commentUserId, setCommentUserId] = useState("");
@@ -17,6 +18,7 @@ const FetchComment = ({ comment }) => {
     };
     getUser();
   }, [comment]);
+
   return (
     <div className="flex flex-col mb-8">
       <p className="flex items-center gap-2">
@@ -33,13 +35,23 @@ const FetchComment = ({ comment }) => {
       </p>
       <p className="ml-6 my-1">{comment.content}</p>
       <p className="flex gap-4">
-        <span className="flex items-center gap-1">
-          <AiOutlineLike /> Like
+        <span
+          onClick={() => handleLike(comment._id)}
+          className="flex items-center gap-1 cursor-pointer"
+        >
+          {currentUser && comment.likes.includes(currentUser.newUser._id) ? (
+            <AiFillLike className="text-blue-400" />
+          ) : (
+            <AiOutlineLike />
+          )}{" "}
+          {comment.numberOfLikes === 0
+            ? "Like"
+            : `${comment.numberOfLikes} Likes`}
         </span>
         {currentUser && currentUser.newUser._id === commentUserId && (
           <>
-            <span>Edit</span>
-            <span>Delete</span>
+            <span className="cursor-pointer">Edit</span>
+            <span className="cursor-pointer">Delete</span>
           </>
         )}
       </p>
