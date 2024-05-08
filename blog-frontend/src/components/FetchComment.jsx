@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { AiFillLike } from "react-icons/ai";
+import moment from "moment";
 
 const FetchComment = ({ comment, handleLike }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -30,6 +31,9 @@ const FetchComment = ({ comment, handleLike }) => {
               className="w-8 h-8 rounded-full"
             />
             <span>{user.name}</span>
+            <span className="text-[12px] ml-1">
+              {moment(comment.updatedAt).fromNow()}
+            </span>
           </>
         )}
       </p>

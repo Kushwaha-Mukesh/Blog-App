@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex align-middle justify-between p-2">
+      <div className="flex align-middle justify-between py-6 mx-8">
         <Link to={"/"}>
           <p className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-1 text-white px-2">
             Mukesh's <span>Blog</span>
@@ -49,7 +49,7 @@ const Header = () => {
             <BsSearch />
           </button>
         </form>
-        <div className="md:flex md:space-x-16 hidden">
+        <div className="md:flex md:space-x-10 hidden">
           <Link to={"/"}>
             <span>Home</span>
           </Link>
@@ -133,7 +133,9 @@ const Header = () => {
               )}
             </span>
             {currentUser ? (
-              <span>Sign Out</span>
+              <span className="cursor-pointer" onClick={handleSignOut}>
+                Sign Out
+              </span>
             ) : (
               <Link to={"/sign-in"}>
                 <button>Sign in</button>

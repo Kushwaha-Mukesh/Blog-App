@@ -39,7 +39,9 @@ const PostPage = () => {
 
   return (
     <main className="flex flex-col items-center justify-center w-3/4 md:w-1/2 mx-auto">
-      <h1 className="text-xl sm:text-3xl mt-8 w-full">{post && post.title}</h1>
+      <h1 className="text-xl sm:text-3xl mt-8 w-fit mx-auto">
+        {post && post.title}
+      </h1>
       <Link
         className="text-sm my-8 border-2 rounded-lg px-2 py-1"
         to={`/search?category=${post && post.category}`}
