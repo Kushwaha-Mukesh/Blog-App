@@ -74,17 +74,22 @@ export const likeComment = async (req, res) => {
 };
 
 export const editComment = async (req, res) => {
-  if (!req.params.id) {
+  if (!req.params.id || !req.body.content) {
     return res.status.json({ success: false, message: "invalid edit comment" });
   }
 
-  if (!req.body.content) {
-    return res
-      .status(403)
-      .json({ success: false, message: "Nothing to comment" });
-  }
-
   try {
+    const findComment = await Comment.findById(req.params.id);
+
+    if (findComment.userId !== req.userId) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "you are not allowed to edit comment.",
+        });
+    }
+
     const comment = await Comment.findByIdAndUpdate(
       { _id: req.params.id },
       { content: req.body.content },
@@ -110,6 +115,16 @@ export const deleteComment = async (req, res) => {
       .json({ success: false, message: "Invalid delete request" });
   }
   try {
+    const findComment = await Comment.findById(req.params.id);
+    if (findComment.userId !== req.userId) {
+      // one more validation can be added to this endpoint that
+      // if user is not the owner of comment then user can not allowed to delete or edit the comment.
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowd to delete comment.",
+      });
+    }
+
     const comment = await Comment.findByIdAndDelete(req.params.id);
     if (!comment) {
       return res
