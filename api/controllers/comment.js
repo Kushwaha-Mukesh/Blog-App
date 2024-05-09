@@ -72,3 +72,56 @@ export const likeComment = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+export const editComment = async (req, res) => {
+  if (!req.params.id) {
+    return res.status.json({ success: false, message: "invalid edit comment" });
+  }
+
+  if (!req.body.content) {
+    return res
+      .status(403)
+      .json({ success: false, message: "Nothing to comment" });
+  }
+
+  try {
+    const comment = await Comment.findByIdAndUpdate(
+      { _id: req.params.id },
+      { content: req.body.content },
+      { new: true }
+    );
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "comment not found" });
+    }
+
+    res.status(200).json({ success: true, message: "comment edited", comment });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "internal server error" });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  if (!req.params.id) {
+    return res
+      .status(403)
+      .json({ success: false, message: "Invalid delete request" });
+  }
+  try {
+    const comment = await Comment.findByIdAndDelete(req.params.id);
+    if (!comment) {
+      return res
+        .status(403)
+        .json({ success: false, message: "invalid delete request" });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "comment deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "internal server error" });
+  }
+};

@@ -13,17 +13,20 @@ const Comment = ({ postId }) => {
   const commentRef = useRef();
   const submitComment = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("/api/comment/create", {
-        content: commentRef.current.value,
-        postId,
-      });
-      if (res.data.success) {
-        commentRef.current.value = "";
-        setComments((prevComments) => [res.data.comment, ...prevComments]);
+    if (currentUser) {
+      try {
+        const res = await axios.post("/api/comment/create", {
+          content: commentRef.current.value,
+          postId,
+        });
+        if (res.data.success) {
+          commentRef.current.value = "";
+          setCommentLength(100);
+          setComments((prevComments) => [res.data.comment, ...prevComments]);
+        }
+      } catch (error) {
+        console.log(error.response.data.message);
       }
-    } catch (error) {
-      console.log(error.response.data.message);
     }
   };
 
@@ -75,6 +78,36 @@ const Comment = ({ postId }) => {
     }
   };
 
+  const editComment = async (id, value) => {
+    try {
+      const res = await axios.put(`/api/comment/editComment/${id}`, {
+        content: value,
+      });
+      if (res.data.success) {
+        setComments(
+          comments.map((comment) =>
+            comment._id === id
+              ? { ...comment, content: res.data.comment.content }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteComment = async (id) => {
+    try {
+      const res = await axios.delete(`/api/comment/deleteComment/${id}`);
+      if (res.data.success) {
+        setComments(comments.filter((comment) => comment._id !== id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <span className="mt-14 text-sm self-start mb-2 text-blue-400">
@@ -103,7 +136,11 @@ const Comment = ({ postId }) => {
         ></textarea>
         <div className="flex items-center justify-between">
           <p>{commentLength} characters remainings.</p>
-          <button type="submit" className="border-2 p-2 rounded-lg mt-4">
+          <button
+            disabled={!currentUser}
+            type="submit"
+            className="border-2 p-2 rounded-lg mt-4 disabled:bg-gray-600 text-gray-200"
+          >
             Comment
           </button>
         </div>
@@ -138,10 +175,12 @@ const Comment = ({ postId }) => {
               key={comment._id}
               comment={comment}
               handleLike={handleLike}
+              handleEditComment={editComment}
+              onDelete={handleDeleteComment}
             />
           ))
         ) : (
-          <p>No Comments Yet !</p>
+          <p>No Comments Yet! Be first to comment</p>
         )}
       </div>
     </>
