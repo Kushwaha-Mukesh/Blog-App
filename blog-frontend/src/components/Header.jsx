@@ -80,7 +80,7 @@ const Header = () => {
                 onClick={() => setProfile(!profile)}
               />
               {profile && (
-                <div className="flex flex-col gap-2 absolute px-4 py-2 rounded-lg right-0 mt-1 border-2 border-black">
+                <div className="flex flex-col gap-2 absolute px-4 py-2 rounded-lg right-0 mt-1 border-2 border-black bg-gray-700 text-gray-300">
                   <span>{currentUser.newUser.name}</span>
                   <Link to={"/dashboard?tab=profile"}>Profile</Link>
                   <span className="cursor-pointer" onClick={handleSignOut}>
@@ -108,7 +108,7 @@ const Header = () => {
       </div>
 
       {show && (
-        <div className="flex flex-col justify-between h-[80vh] absolute w-[200px] top-12 right-0 rounded-lg p-4 z-20 border-2 border-black">
+        <div className="flex flex-col justify-between h-[80vh] absolute w-[200px] top-16 right-0 rounded-lg p-4 z-20 border-2 border-black bg-gray-700 text-gray-300">
           <div className="flex flex-col gap-4">
             <Link to={"/"}>
               <span>Home</span>

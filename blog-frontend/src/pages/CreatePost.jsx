@@ -117,6 +117,9 @@ const CreatePost = () => {
             <option value="nextjs" className="text-black">
               NextJs
             </option>
+            <option value="technology" className="text-black">
+              Technology
+            </option>
           </select>
         </div>
         <div className="flex justify-between border-dotted border-2 border-sky-500 py-1 px-2 rounded-lg">

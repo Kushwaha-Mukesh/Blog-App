@@ -28,7 +28,7 @@ const FetchComment = ({ comment, handleLike, handleEditComment, onDelete }) => {
   };
 
   return (
-    <div className="flex flex-col mb-8">
+    <div className="flex flex-col mb-6">
       <p className="flex items-center gap-2">
         {user && (
           <>

@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ImSpinner10 } from "react-icons/im";
 import Comment from "../components/Comment";
+import PostCard from "../components/PostCard";
 
 const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState();
+  const [recentPosts, setRecentPosts] = useState([]);
   useEffect(() => {
     try {
       const getPost = async () => {
@@ -27,6 +29,25 @@ const PostPage = () => {
     }
   }, [postSlug]);
 
+  useEffect(() => {
+    try {
+      const getRecentPost = async () => {
+        setLoading(true);
+        const res = await axios.get("/api/post/getPosts?limit=3");
+        if (res.data.success) {
+          setLoading(false);
+          setRecentPosts(res.data.posts);
+        }
+        setLoading(false);
+      };
+
+      getRecentPost();
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  }, []);
+
   if (loading)
     return (
       <div className="flex justify-center items-center w-full h-screen">
@@ -38,7 +59,7 @@ const PostPage = () => {
     );
 
   return (
-    <main className="flex flex-col items-center justify-center w-3/4 md:w-1/2 mx-auto">
+    <main className="flex flex-col items-center justify-center w-3/4 lg:w-1/2 mx-auto">
       <h1 className="text-xl sm:text-3xl mt-8 w-fit mx-auto">
         {post && post.title}
       </h1>
@@ -66,6 +87,15 @@ const PostPage = () => {
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
       {post && <Comment postId={post._id} />}
+      <div className="w-full">
+        <h1 className="text-2xl text-center mb-10">Recent Articles</h1>
+        <div className="grid grid-cols-2 md:grid-cols-3 place-content-between gap-x-4 gap-y-12 mb-20">
+          {recentPosts.length > 0 &&
+            recentPosts.map((recentPost) => (
+              <PostCard key={recentPost._id} post={recentPost} />
+            ))}
+        </div>
+      </div>
     </main>
   );
 };

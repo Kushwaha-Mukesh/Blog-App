@@ -39,7 +39,7 @@ const App = () => {
   return (
     <>
       {loading ? (
-        <div className="flex justify-center items-center gap-2 h-screen w-full text-xl">
+        <div className="flex justify-center items-center gap-2 h-[80vh] w-full text-xl">
           <ImSpinner10 className="animate-spin" />
           Loading...
         </div>

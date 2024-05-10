@@ -133,13 +133,11 @@ export const authenticate = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "user is authenticated!",
-        user: newUser,
-      });
+    res.status(200).json({
+      success: true,
+      message: "user is authenticated!",
+      newUser: user,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "internal server error" });
