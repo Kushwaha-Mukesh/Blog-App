@@ -122,3 +122,26 @@ export const google = async (req, res) => {
       .json({ success: false, message: "server google authentication error" });
   }
 };
+
+export const authenticate = async (req, res) => {
+  if (!req.userId) {
+    return res
+      .status(401)
+      .json({ success: false, message: "You are not logged in!" });
+  }
+
+  try {
+    const user = await User.findById(req.userId);
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "user is authenticated!",
+        user: newUser,
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "internal server error" });
+  }
+};

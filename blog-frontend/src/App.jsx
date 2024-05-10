@@ -11,27 +11,59 @@ import CreatePost from "./pages/CreatePost";
 import AdminRoute from "./components/AdminRoute";
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { signInStart, signInFailure, signInSuccess } from "./store/userSlice";
+import { useDispatch } from "react-redux";
+import { ImSpinner10 } from "react-icons/im";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
+  useEffect(() => {
+    const isAuthenticate = async () => {
+      try {
+        dispatch(signInStart());
+        const res = await axios.get("/api/auth/isAuthenticated");
+        if (res.data.success) {
+          dispatch(signInSuccess(res.data));
+        }
+      } catch (error) {
+        dispatch(signInFailure(error.response.data));
+      }
+    };
+
+    isAuthenticate();
+  }, []);
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-        <Route element={<AdminRoute />}>
-          <Route path="/create-post" element={<CreatePost />} />
-          <Route path="/update-post/:postId" element={<UpdatePost />} />
-        </Route>
-        <Route path="/post/:postSlug" element={<PostPage />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      {loading ? (
+        <div className="flex justify-center items-center gap-2 h-screen w-full text-xl">
+          <ImSpinner10 className="animate-spin" />
+          Loading...
+        </div>
+      ) : (
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+            <Route element={<AdminRoute />}>
+              <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/update-post/:postId" element={<UpdatePost />} />
+            </Route>
+            <Route path="/post/:postSlug" element={<PostPage />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+          </Routes>
+        </BrowserRouter>
+      )}
+    </>
   );
 };
 
