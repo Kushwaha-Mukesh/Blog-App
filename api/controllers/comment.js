@@ -1,4 +1,6 @@
 import Comment from "../models/comment.model.js";
+import Post from "../models/post.model.js";
+import User from "../models/user.model.js";
 
 export const createComment = async (req, res) => {
   const { content, postId } = req.body;
@@ -114,7 +116,12 @@ export const deleteComment = async (req, res) => {
   }
   try {
     const findComment = await Comment.findById(req.params.id);
-    if (findComment.userId.toString() !== req.userId) {
+    if (!findComment) {
+      return res
+        .status(403)
+        .json({ success: false, message: "invalid delete request" });
+    }
+    if (findComment.userId.toString() !== req.userId && !req.isAdmin) {
       // one more validation can be added to this endpoint that
       // if user is not the owner of comment then user can not allowed to delete or edit the comment.
       return res.status(403).json({
@@ -124,11 +131,6 @@ export const deleteComment = async (req, res) => {
     }
 
     const comment = await Comment.findByIdAndDelete(req.params.id);
-    if (!comment) {
-      return res
-        .status(403)
-        .json({ success: false, message: "invalid delete request" });
-    }
 
     res
       .status(200)
@@ -136,5 +138,58 @@ export const deleteComment = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "internal server error" });
+  }
+};
+
+export const getAllComments = async (req, res) => {
+  if (!req.isAdmin) {
+    return res
+      .status(403)
+      .json({ success: false, message: "you are not authorized" });
+  }
+
+  try {
+    const startIdx = parseInt(req.params.startIdx) || 0;
+    const limit = parseInt(req.params.limit) || 9;
+    const sortDirection = req.params.order === "asc" ? 1 : -1;
+    const comments = await Comment.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIdx)
+      .limit(limit);
+    const totalComments = await Comment.countDocuments();
+    const now = new Date();
+    now.setMonth(now.getMonth() - 1);
+    const lastMonthComments = await Comment.countDocuments({
+      createdAt: { $gte: now },
+    });
+
+    const posts = [];
+    const users = [];
+
+    for (let comment of comments) {
+      const post = await Post.findById(comment.postId);
+      const postObj = {
+        title: post.title,
+        slug: post.slug,
+      };
+      posts.push(postObj);
+      const user = await User.findById(comment.userId);
+      const userObj = {
+        name: user.name,
+        image: user.profilePicture,
+      };
+      users.push(userObj);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Fetched all comments",
+      comments,
+      posts,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal Server error" });
   }
 };

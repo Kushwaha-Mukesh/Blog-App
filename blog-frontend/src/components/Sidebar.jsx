@@ -9,6 +9,7 @@ import { IoDocumentText } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
 import { FaUsers } from "react-icons/fa";
 import axios from "axios";
+import { FaRegComments } from "react-icons/fa";
 
 const Sidebar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -90,6 +91,16 @@ const Sidebar = () => {
           >
             <IoDocumentText className="relative top-1 mr-2" />
             Posts
+          </Link>
+
+          <Link
+            to={"/dashboard?tab=comments"}
+            className={`mx-4 my-2 flex hover:border-b-2 ${
+              tab === "posts" && "border-b-2 pb-2"
+            }`}
+          >
+            <FaRegComments className="relative top-1 mr-2" />
+            Comments
           </Link>
         </>
       )}

@@ -168,7 +168,7 @@ const Comment = ({ postId }) => {
         </span>
       </h2>
 
-      <div className="self-start mb-14 mt-6">
+      <div className="self-start mb-14 mt-6 min-h-fit max-h-[550px] overflow-y-auto">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <FetchComment

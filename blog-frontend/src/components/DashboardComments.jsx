@@ -2,23 +2,26 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
-import { FaCheckCircle } from "react-icons/fa";
-import { RxCrossCircled } from "react-icons/rx";
+import { IoInformationCircleOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
-const Users = () => {
+const DashboardComments = () => {
   const { currentUser } = useSelector((state) => state.user);
+  const [comments, setComments] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [username, setUsername] = useState("");
+  const [commentId, setCommentId] = useState("");
   useEffect(() => {
-    const getUsers = async () => {
+    const getComments = async () => {
       try {
-        const res = await axios.get(`/api/user/getusers`);
+        const res = await axios.get("/api/comment/getComments");
         if (res.data.success) {
+          setComments(res.data.comments);
+          setPosts(res.data.posts);
           setUsers(res.data.users);
-          if (res.data.users.length < 10) {
+          if (res.data.comments.length < 10) {
             setShowMore(false);
           }
         }
@@ -28,17 +31,19 @@ const Users = () => {
     };
 
     if (currentUser.newUser.isAdmin) {
-      getUsers();
+      getComments();
     }
   }, [currentUser.newUser._id]);
 
   const handleShowMore = async () => {
-    const startIndex = users.length;
+    const startIndex = comments.length;
     try {
-      const res = await axios.get(`/api/user/getusers?startIdx=${startIndex}`);
+      const res = await axios.get(
+        `/api/comment/getComments?startIdx=${startIndex}`
+      );
       if (res.data.success) {
-        setUsers((prev) => [...prev, ...res.data.users]);
-        if (res.data.users.length < 10) {
+        setComments((prev) => [...prev, ...res.data.comments]);
+        if (res.data.comments.length < 10) {
           setShowMore(false);
         }
       }
@@ -47,17 +52,18 @@ const Users = () => {
     }
   };
 
-  const handleDeleteClick = (userId, username) => {
-    setUserId(userId);
-    setUsername(username);
+  const handleDeleteClick = (id) => {
+    setCommentId(id);
     setShowModal(true);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      const res = await axios.delete(`/api/user/delete/${userId}`);
+      const res = await axios.delete(`/api/comment/deleteComment/${commentId}`);
       if (res.data.success) {
-        setUsers((prev) => prev.filter((user) => user._id !== userId));
+        setComments((prev) =>
+          prev.filter((comment) => comment._id !== commentId)
+        );
       }
       setShowModal(false);
     } catch (error) {
@@ -67,42 +73,44 @@ const Users = () => {
   };
   return (
     <>
-      {currentUser.newUser.isAdmin && users.length > 0 ? (
+      {currentUser.newUser.isAdmin && comments.length > 0 ? (
         <div className="flex-1 mx-4 mt-8 overflow-x-auto">
-          <table className="table-auto text-center min-w-[800px] w-full">
+          <table className="table-auto text-center min-w-[900px] w-full">
             <thead>
               <tr className="border-b-8 border-transparent">
                 <th>Date Created</th>
-                <th>Profile Image</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Admin</th>
+                <th>Likes</th>
+                <th>Comments</th>
+                <th>Posts</th>
+                <th>Users</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user._id} className="border-b-8 border-transparent">
-                  <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                  <td>
-                    <img
-                      className="w-12 h-12 rounded-full mx-auto"
-                      src={user.profilePicture}
-                      alt="profile picture"
-                    />
+              {comments.map((comment, i) => (
+                <tr
+                  key={comment._id}
+                  className="border-b-[12px] border-transparent"
+                >
+                  <td>{new Date(comment.createdAt).toLocaleDateString()}</td>
+                  <td>{comment.numberOfLikes}</td>
+                  <td>{comment.content}</td>
+                  <td className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    <Link to={`/post/${posts[i].slug}`}>{posts[i].title}</Link>
                   </td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
                   <td>
-                    {user.isAdmin ? (
-                      <FaCheckCircle className="text-green-500 mx-auto" />
-                    ) : (
-                      <RxCrossCircled className="text-gray-500 mx-auto" />
-                    )}
+                    <p className="flex items-center gap-2">
+                      <img
+                        className="w-8 h-8 rounded-full"
+                        src={users[i].image}
+                        alt="user-image"
+                      />
+                      <span>{users[i].name}</span>
+                    </p>
                   </td>
                   <td>
                     <MdDelete
-                      onClick={() => handleDeleteClick(user._id, user.name)}
+                      onClick={() => handleDeleteClick(comment._id)}
                       className="mx-auto hover:cursor-pointer hover:text-red-500"
                     />
                   </td>
@@ -113,11 +121,11 @@ const Users = () => {
         </div>
       ) : (
         <div className="flex flex-1 justify-center items-center text-lg">
-          There are no users.
+          There are no comments yet!
         </div>
       )}
 
-      {users.length > 0 && showMore && (
+      {comments.length > 0 && showMore && (
         <button
           onClick={handleShowMore}
           className="text-sm w-full text-center text-teal-500"
@@ -129,9 +137,7 @@ const Users = () => {
       {showModal && (
         <div className="absolute top-1/2 left-1/2 rounded-lg py-4 px-8 text-center flex flex-col gap-2 bg-gray-800 text-white">
           <IoInformationCircleOutline className="self-center text-3xl" />
-          <p className="text-lg mb-6">
-            Are you sure want to delete "{username}" user ?
-          </p>
+          <p className="text-lg mb-6">Are you sure want to delete comment?</p>
           <p className="flex justify-around">
             <button
               onClick={handleConfirmDelete}
@@ -152,4 +158,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default DashboardComments;
