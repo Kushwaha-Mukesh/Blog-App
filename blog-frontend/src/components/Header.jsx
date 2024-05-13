@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { IoIosMoon, IoIosSunny } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../store/themeSlice";
@@ -15,6 +15,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [profile, setProfile] = useState(false);
+  const searchRef = useRef();
+  const navigate = useNavigate();
   const handleClick = () => {
     setShow(!show);
   };
@@ -30,6 +32,11 @@ const Header = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?searchTerm=${searchRef.current.value}`);
+  };
+
   return (
     <>
       <div className="flex align-middle justify-between py-6 mx-8">
@@ -38,10 +45,14 @@ const Header = () => {
             Mukesh's <span>Blog</span>
           </p>
         </Link>
-        <form className="border border-black py-1 px-2 rounded-lg">
+        <form
+          onSubmit={(e) => handleSearch(e)}
+          className="border border-black py-1 px-2 rounded-lg"
+        >
           <input
             type="text"
             name="search"
+            ref={searchRef}
             placeholder="Search blog by name..."
             className="mr-1 focus:outline-none bg-transparent"
           />

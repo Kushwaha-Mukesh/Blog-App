@@ -17,6 +17,7 @@ import axios from "axios";
 import { signInStart, signInFailure, signInSuccess } from "./store/userSlice";
 import { useDispatch } from "react-redux";
 import { ImSpinner10 } from "react-icons/im";
+import Search from "./pages/Search";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/search" element={<Search />} />
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
