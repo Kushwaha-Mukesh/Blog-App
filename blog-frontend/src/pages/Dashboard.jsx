@@ -5,6 +5,7 @@ import Profile from "../components/Profile";
 import Posts from "../components/Posts";
 import Users from "../components/Users";
 import DashboardComments from "../components/DashboardComments";
+import DashboardOverview from "../components/DashboardOverview";
 
 const dashboard = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const dashboard = () => {
   return (
     <div className="min-h-screen w-full flex flex-col sm:flex-row mt-4">
       <Sidebar />
+      {tab === "dashboard" && <DashboardOverview />}
       {tab === "profile" && <Profile />}
       {tab === "posts" && <Posts />}
       {tab === "users" && <Users />}

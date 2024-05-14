@@ -185,6 +185,8 @@ export const getAllComments = async (req, res) => {
       success: true,
       message: "Fetched all comments",
       comments,
+      totalComments,
+      lastMonthComments,
       posts,
       users,
     });

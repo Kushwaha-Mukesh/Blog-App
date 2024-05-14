@@ -55,9 +55,9 @@ const Sidebar = () => {
       {currentUser.newUser.isAdmin && (
         <>
           <Link
-            to={""}
+            to={"/dashboard?tab=dashboard"}
             className={`mx-4 my-2 flex hover:border-b-2 ${
-              tab === "" && "border-b-2 pb-2"
+              tab === "dashboard" && "border-b-2 pb-2"
             }`}
           >
             <RxDashboard className="relative top-1 mr-2" />
@@ -96,7 +96,7 @@ const Sidebar = () => {
           <Link
             to={"/dashboard?tab=comments"}
             className={`mx-4 my-2 flex hover:border-b-2 ${
-              tab === "posts" && "border-b-2 pb-2"
+              tab === "comments" && "border-b-2 pb-2"
             }`}
           >
             <FaRegComments className="relative top-1 mr-2" />
