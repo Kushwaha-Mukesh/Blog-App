@@ -20,8 +20,8 @@ const UserDetails = () => {
     }
   }, []);
   return (
-    <div className="flex flex-col gap-10">
-      <div className="border-2 border-slate-800 hover:shadow-lg shadow-sm shadow-blue-500/50 rounded-lg p-2">
+    <div className="flex flex-col gap-4">
+      <div className="border-2 border-slate-800 hover:shadow-lg shadow-sm shadow-blue-500/50 rounded-lg p-2 w-72 mx-6">
         <p className="flex justify-between items-center text-xl">
           Total Users
           <FaUsers />
@@ -34,18 +34,19 @@ const UserDetails = () => {
           {userDetails && userDetails.lastMonthUsers} Last Month
         </span>
       </div>
-      <div className="">
-        <p className="flex justify-between w-full">
-          Recent Users <button>See all</button>
+      <div className="px-6">
+        <p className="flex justify-between w-full mb-4">
+          Recent Users{" "}
+          <button className="border-2 rounded-lg px-2 py-1">See all</button>
         </p>
         <div>
-          <p className="text-sm flex justify-between w-full">
+          <p className="text-sm flex justify-between w-full mb-4">
             <span>USER IMAGE</span> <span>USERNAME</span>
           </p>
           {userDetails &&
             userDetails.users.map((user) => (
               <p
-                className="flex justify-between items-center w-full"
+                className="flex justify-between mb-2 items-center w-full"
                 key={user._id}
               >
                 <img

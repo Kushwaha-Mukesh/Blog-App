@@ -20,8 +20,8 @@ const PostDetails = () => {
     }
   }, []);
   return (
-    <div className="flex flex-col gap-10">
-      <div className="border-2 border-slate-800 hover:shadow-lg shadow-sm shadow-blue-500/50 rounded-lg p-2">
+    <div className="flex flex-col gap-4 lg:col-span-2 lg:w-2/3 w-full">
+      <div className="border-2 border-slate-800 hover:shadow-lg shadow-sm shadow-blue-500/50 rounded-lg p-2 w-72 mx-6">
         <p className="flex justify-between items-center text-xl">
           Total Posts
           <TbArticle />
@@ -34,18 +34,19 @@ const PostDetails = () => {
           {postDetails && postDetails.lastMonthPosts} Last Month
         </span>
       </div>
-      <div className="">
-        <p className="flex justify-between w-full">
-          Recent Posts <button>See all</button>
+      <div className="px-6 w-auto">
+        <p className="flex justify-between w-full mb-4 items-center">
+          Recent Posts{" "}
+          <button className="border-2 rounded-lg px-2 py-1">See all</button>
         </p>
         <div>
-          <p className="text-sm flex justify-between w-full">
+          <p className="text-sm flex justify-between w-full mb-4">
             <span>POST IMAGE</span> <span>POST</span> <span>CATEGORY</span>
           </p>
           {postDetails &&
             postDetails.posts.map((post) => (
               <p
-                className="flex justify-between items-center w-full"
+                className="flex justify-between items-center w-full mb-2 text-center"
                 key={post._id}
               >
                 <img
