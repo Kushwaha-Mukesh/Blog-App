@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
-    "dev": "nodemon api/index.js"
+    "dev": "nodemon api/index.js",
+    "build": "npm install && npm install --prefix blog-frontend && npm run build --prefix blog-frontend"
   },
   "keywords": [
     "api",
