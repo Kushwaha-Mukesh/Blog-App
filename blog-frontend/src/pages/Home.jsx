@@ -10,7 +10,7 @@ const Home = () => {
     try {
       const getPost = async () => {
         setLoading(true);
-        const res = await axios.get(`/api/post/getPosts`);
+        const res = await axios.get(`/api/post/getposts`);
         if (res.data.success) {
           setLoading(false);
           setPost(res.data.posts);
