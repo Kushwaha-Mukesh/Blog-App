@@ -30,6 +30,7 @@ const App = () => {
         if (res.data.success) {
           dispatch(signInSuccess(res.data));
         }
+        dispatch(signInFailure(error.response.data));
       } catch (error) {
         dispatch(signInFailure(error.response.data));
       }
