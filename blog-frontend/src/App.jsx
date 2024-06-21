@@ -30,7 +30,7 @@ const App = () => {
         if (res.data.success) {
           dispatch(signInSuccess(res.data));
         }
-        dispatch(signInFailure(error.response.data));
+        dispatch(signInFailure("User is not authenticated"));
       } catch (error) {
         dispatch(signInFailure(error.response.data));
       }
